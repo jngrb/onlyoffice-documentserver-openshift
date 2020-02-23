@@ -1,3 +1,7 @@
+Note that this license only covers the Openshift template files in this repository.
+
+---
+
 MIT License
 
 Copyright (c) 2020 Jan Grieb
@@ -19,3 +23,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+The templates use software provided by the OnlyOffice team, specially the official OnlyOffice DocumentServer docker image (see references below).
+
+These components are licenced under AGPL-3.0 with their copyright belonging to the OnlyOffice team. Also the ONLYOFFICE trademark and logo belong to OnlyOffice.
+
+References:
+
+* https://www.onlyoffice.com/de/download.aspx
+* https://github.com/ONLYOFFICE/Docker-DocumentServer
+* https://hub.docker.com/r/onlyoffice/documentserver/
+* http://www.gnu.org/licenses/agpl-3.0.html

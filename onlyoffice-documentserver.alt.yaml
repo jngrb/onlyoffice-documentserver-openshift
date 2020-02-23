@@ -18,6 +18,9 @@ parameters:
 - name: REDIS_SERVICE
   description: Name of the Redis service
   value: redis.onlyoffice.svc
+- name: DOCUMENTSERVER_DATA_SERVICE
+  description: Name of the OnlyOffice DocumentServer data service (deployed with this template)
+  value: documentserver-data.onlyoffice.svc
 - name: PVC_SIZE
   description: Size of the persistent data for OnlyOffice
   value: 2Gi
@@ -54,6 +57,114 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
+      app: documentserver-data
+    name: documentserver-data
+  spec:
+    replicas: 1
+    selector:
+      app: documentserver-data
+      deploymentconfig: documentserver-data
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: documentserver-data
+          deploymentconfig: documentserver-data
+      spec:
+        containers:
+          - env:
+              - name: ONLYOFFICE_DATA_CONTAINER
+                value: 'true'
+              - name: POSTGRESQL_SERVER_HOST
+                value: ${POSTGRESQL_SERVER_HOST}
+              - name: POSTGRESQL_SERVER_PORT
+                value: '5432'
+              - name: POSTGRESQL_SERVER_DB_NAME
+                valueFrom:
+                  secretKeyRef:
+                    key: database-name
+                    name: ${POSTGRESQL_SECRET}
+              - name: POSTGRESQL_SERVER_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: database-user
+                    name: ${POSTGRESQL_SECRET}
+              - name: POSTGRESQL_SERVER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    key: database-password
+                    name: ${POSTGRESQL_SECRET}
+              - name: AMQP_SERVER_URL
+                value: 'amqp://guest:guest@${RABBITMQ_SERVICE}'
+              - name: REDIS_SERVER_HOST
+                value: ${REDIS_SERVICE}
+              - name: REDIS_SERVER_PORT
+                value: '6379'
+            image: documentserver:${DOCUMENTSERVER_VERSION}
+            imagePullPolicy: IfNotPresent
+            name: documentserver-data
+            ports:
+              - containerPort: 80
+                protocol: TCP
+              - containerPort: 443
+                protocol: TCP
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+              - mountPath: /usr/share/fonts/truetype/custom
+                name: documentserver-1
+              - mountPath: /var/lib/onlyoffice
+                name: documentserver-2
+              - mountPath: /var/lib/postgresql
+                name: documentserver-3
+              - mountPath: /var/log/onlyoffice
+                name: documentserver-4
+              - mountPath: /var/www/onlyoffice/Data
+                name: onlyoffice-data
+                subPath: data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccountName: root-allowed
+        terminationGracePeriodSeconds: 30
+        volumes:
+          - emptyDir: {}
+            name: documentserver-1
+          - emptyDir: {}
+            name: documentserver-2
+          - emptyDir: {}
+            name: documentserver-3
+          - emptyDir: {}
+            name: documentserver-4
+          - name: onlyoffice-data
+            persistentVolumeClaim:
+              claimName: onlyoffice-data
+    test: false
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - documentserver-data
+          from:
+            kind: ImageStreamTag
+            name: 'documentserver:${DOCUMENTSERVER_VERSION}'
+        type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
       app: documentserver
     name: documentserver
   spec:
@@ -80,6 +191,8 @@ objects:
       spec:
         containers:
           - env:
+              - name: ONLYOFFICE_DATA_CONTAINER_HOST
+                value: ${DOCUMENTSERVER_DATA_SERVICE}
               - name: POSTGRESQL_SERVER_HOST
                 value: ${POSTGRESQL_SERVER_HOST}
               - name: POSTGRESQL_SERVER_PORT
@@ -152,6 +265,7 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
+            - documentserver-data
             - documentserver
           from:
             kind: ImageStreamTag
@@ -161,16 +275,20 @@ objects:
   kind: Service
   metadata:
     labels:
-      app: documentserver
-    name: documentserver
+      app: documentserver-data
+    name: documentserver-data
   spec:
     ports:
       - name: 80-tcp
         port: 80
         protocol: TCP
         targetPort: 80
+      - name: 443-tcp
+        port: 443
+        protocol: TCP
+        targetPort: 443
     selector:
-      deploymentconfig: documentserver
+      deploymentconfig: documentserver-data
     sessionAffinity: None
     type: ClusterIP
   status:

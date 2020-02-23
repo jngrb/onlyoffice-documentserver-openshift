@@ -34,6 +34,13 @@ oc -n openshift process postgresql-persistent -p POSTGRESQL_USER=onlyoffice -p P
 oc -n openshift process postgresql-ephemeral | oc -n $PROJECT create -f -
 ```
 
+For now you need to remove the authentication password.
+
+* Remove the REDIS_PASSWORD environment variable.
+* Modify the readiness check to not use this password.
+
+This can be changed as soon as OnlyOffice DocumentServer v.5.5.0 is released, see <https://github.com/ONLYOFFICE/DocumentServer/issues/353>.
+
 ### 3 Deploy RabbitMQ microservice
 
 ```[bash]
@@ -57,3 +64,24 @@ oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-communityserver
 ```
 
 Wait for the POD to start and run through all initialization steps. This may take a while.
+
+## Open issues
+
+* do not require root user to run the container
+* seperate the all-in-one container into subservices
+* what about a data-container (`onlyoffice-communityserver.alt.yaml`, inspired by official OnlyOffice docker-compose file, not working yet)
+
+(See also the respective issues in the OnlyOffice DocumentServer repository.)
+
+## Dependency on OnlyOffice DocumentServer Community Edition
+
+This OpenShift template uses software provided by the OnlyOffice team, specially the official OnlyOffice DocumentServer docker image (see references below).
+
+These components are licenced under AGPL-3.0 with their copyright belonging to the OnlyOffice team. Also the ONLYOFFICE trademark and logo belong to OnlyOffice.
+
+References:
+
+* <https://www.onlyoffice.com/de/download.aspx>
+* <https://github.com/ONLYOFFICE/Docker-DocumentServer>
+* <https://hub.docker.com/r/onlyoffice/documentserver/>
+* <http://www.gnu.org/licenses/agpl-3.0.html>
