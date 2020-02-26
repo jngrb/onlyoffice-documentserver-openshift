@@ -69,7 +69,7 @@ Wait for the POD to start and run through all initialization steps. This may tak
 
 * do not require root user to run the container
 * seperate the all-in-one container into subservices
-* what about a data-container (`onlyoffice-communityserver.alt.yaml`, inspired by official OnlyOffice docker-compose file, not working yet)
+* what about a data-container (see 'testing' template `onlyoffice-communityserver.alt.yaml`, inspired by official OnlyOffice docker-compose file, not working yet)
 
 (See also the respective issues in the OnlyOffice DocumentServer repository.)
 
@@ -111,7 +111,7 @@ Copyright (C) 2020, Jan Grieb
 
 Very welcome!
 
-1. Fork it (https://github.com/jngrb/openproject-openshift/fork)
+1. Fork it (<https://github.com/jngrb/openproject-openshift/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
