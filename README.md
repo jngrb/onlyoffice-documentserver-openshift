@@ -31,7 +31,7 @@ oc -n openshift process postgresql-persistent -p POSTGRESQL_USER=onlyoffice -p P
 ### 2 Deploy Redis database
 
 ```[bash]
-oc -n openshift process postgresql-ephemeral | oc -n $PROJECT create -f -
+oc -n openshift process redis-ephemeral | oc -n $PROJECT create -f -
 ```
 
 For now you need to remove the authentication password.
