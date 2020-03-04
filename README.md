@@ -34,6 +34,8 @@ oc -n openshift process postgresql-persistent -p POSTGRESQL_USER=onlyoffice -p P
 oc -n openshift process redis-ephemeral | oc -n $PROJECT create -f -
 ```
 
+If the OnlyOffice pod is to be deployed only on selected nodes, apply the node selector also to the Redis deployment (here, we use the node selector 'appclass=main').
+
 For now you need to remove the authentication password.
 
 * Remove the REDIS_PASSWORD environment variable.
@@ -46,6 +48,8 @@ This can be changed as soon as OnlyOffice DocumentServer v.5.5.0 is released, se
 ```[bash]
 oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-communityserver-openshift/master/rabbitmq.yaml | oc -n $PROJECT create -f -
 ```
+
+Also apply the node selector for this deployment.
 
 ### 4 Deploy OnlyOffice DocumentServer
 

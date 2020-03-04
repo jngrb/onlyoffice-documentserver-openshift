@@ -78,6 +78,8 @@ objects:
           app: documentserver
           deploymentconfig: documentserver
       spec:
+        nodeSelector:
+          appclass: main
         containers:
           - env:
               - name: POSTGRESQL_SERVER_HOST
