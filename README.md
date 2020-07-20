@@ -46,7 +46,7 @@ This can be changed as soon as OnlyOffice DocumentServer v.5.5.0 is released, se
 ### 3 Deploy RabbitMQ microservice
 
 ```[bash]
-oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-communityserver-openshift/master/rabbitmq.yaml | oc -n $PROJECT create -f -
+oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-documentserver-openshift/master/rabbitmq.yaml | oc -n $PROJECT create -f -
 ```
 
 Also apply the node selector for this deployment.
@@ -64,7 +64,7 @@ oc adm policy add-scc-to-user anyuid -z root-allowed
 Now, we can run the multi-service DocumentServer image (Change `<POSTGRESQL-SECRET>` to the secret with the credentials for the postgresql deploment.).
 
 ```[bash]
-oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-communityserver-openshift/master/onlyoffice-communityserver.yaml -p ONLYOFFICE_HOST=onlyoffice.example.com -p POSTGRESQL_SECERT=<POSTGRESQL-SECRET> | oc -n $PROJECT create -f -
+oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-documentserver-openshift/master/onlyoffice-documentserver.yaml -p ONLYOFFICE_HOST=onlyoffice.example.com -p POSTGRESQL_SECERT=<POSTGRESQL-SECRET> | oc -n $PROJECT create -f -
 ```
 
 Wait for the POD to start and run through all initialization steps. This may take a while.
@@ -73,7 +73,7 @@ Wait for the POD to start and run through all initialization steps. This may tak
 
 * do not require root user to run the container
 * seperate the all-in-one container into subservices
-* what about a data-container (see 'testing' template `onlyoffice-communityserver.alt.yaml`, inspired by official OnlyOffice docker-compose file, not working yet)
+* what about a data-container (see 'testing' template `onlyoffice-documentserver.alt.yaml`, inspired by official OnlyOffice docker-compose file, not working yet)
 
 (See also the respective issues in the OnlyOffice DocumentServer repository.)
 
