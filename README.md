@@ -61,7 +61,7 @@ oc policy add-role-to-user system:deployer -z root-allowed
 oc adm policy add-scc-to-user anyuid -z root-allowed
 ```
 
-Now, we can run the multi-service DocumentServer image (Change `<POSTGRESQL-SECRET>` to the secret with the credentials for the postgresql deploment.).
+Now, we can run the multi-service DocumentServer image (Change `<POSTGRESQL-SECRET>` to the secret with the credentials for the postgresql deployment, usually 'postgresql'.).
 
 ```[bash]
 oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-documentserver-openshift/master/onlyoffice-documentserver.yaml -p ONLYOFFICE_HOST=onlyoffice.example.com -p POSTGRESQL_SECRET=<POSTGRESQL-SECRET> | oc -n $PROJECT create -f -
