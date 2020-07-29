@@ -64,7 +64,7 @@ oc adm policy add-scc-to-user anyuid -z root-allowed
 Now, we can run the multi-service DocumentServer image (Change `<POSTGRESQL-SECRET>` to the secret with the credentials for the postgresql deploment.).
 
 ```[bash]
-oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-documentserver-openshift/master/onlyoffice-documentserver.yaml -p ONLYOFFICE_HOST=onlyoffice.example.com -p POSTGRESQL_SECERT=<POSTGRESQL-SECRET> | oc -n $PROJECT create -f -
+oc process -f https://raw.githubusercontent.com/jngrb/onlyoffice-documentserver-openshift/master/onlyoffice-documentserver.yaml -p ONLYOFFICE_HOST=onlyoffice.example.com -p POSTGRESQL_SECRET=<POSTGRESQL-SECRET> | oc -n $PROJECT create -f -
 ```
 
 Wait for the POD to start and run through all initialization steps. This may take a while.
