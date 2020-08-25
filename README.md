@@ -39,9 +39,9 @@ If the OnlyOffice pod is to be deployed only on selected nodes, apply the node s
 For now you need to remove the authentication password.
 
 * Remove the REDIS_PASSWORD environment variable.
-* Modify the readiness check to not use this password.
+* Modify the readiness check to not use this password (remove `-a $REDIS_PASSWORD` from the command line arguments).
 
-This can be changed as soon as OnlyOffice DocumentServer v.5.5.0 is released, see <https://github.com/ONLYOFFICE/DocumentServer/issues/353>.
+A fix of this for OnlyOffice DocumentServer v5.5.0 is no longer relevant, since redis was removed as dependency for DocumentServer Community Edition v5.6.0+, see <https://github.com/ONLYOFFICE/DocumentServer/issues/353>.
 
 ### 3 Deploy RabbitMQ microservice
 
