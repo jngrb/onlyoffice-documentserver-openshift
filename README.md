@@ -25,16 +25,24 @@ oc new-project $PROJECT
 ### 1 Deploy PostgresSQL database
 
 ```[bash]
-oc -n openshift process postgresql-persistent -p POSTGRESQL_USER=onlyoffice -p POSTGRESQL_PASSWORD=onlyoffice -p POSTGRESQL_DATABASE=onlyoffice | oc -n $PROJECT create -f -
+oc project $PROJECT
+oc -n openshift process postgresql-persistent -p POSTGRESQL_DATABASE=onlyoffice | oc create -f -
 ```
+
+(If you want to keep things simple for testing, use -p POSTGRESQL_USER=onlyoffice -p POSTGRESQL_PASSWORD=onlyoffice.)
 
 ### 2 Deploy Redis database
 
 ```[bash]
-oc -n openshift process redis-ephemeral | oc -n $PROJECT create -f -
+oc -n openshift process redis-ephemeral | oc create -f -
 ```
 
-If the OnlyOffice pod is to be deployed only on selected nodes, apply the node selector also to the Redis deployment (here, we use the node selector 'appclass=main').
+If the OnlyOffice pod is to be deployed only on selected nodes, apply the node selector also to the Redis deployment (here, we use the node selector 'appclass=main'):
+
+```[bash]
+oc project $PROJECT
+oc patch dc redis --patch='{"spec":{"template":{"spec":{"nodeSelector":{"appclass":"main"}}}}}'
+```
 
 For now you need to remove the authentication password.
 
