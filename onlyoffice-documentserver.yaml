@@ -191,6 +191,7 @@ objects:
     port:
       targetPort: 80-tcp
     tls:
+      insecureEdgeTerminationPolicy: Redirect
       termination: edge
     to:
       kind: Service
