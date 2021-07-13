@@ -24,6 +24,9 @@ parameters:
 - name: ONLYOFFICE_HOST
   description: published route of this service
   required: true
+- name: APPCLASS
+  description: Value of the label appclass specifyng the node where the main POD will run
+  value: main
 objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
@@ -82,7 +85,7 @@ objects:
           deploymentconfig: documentserver
       spec:
         nodeSelector:
-          appclass: main
+          appclass: ${APPCLASS}
         containers:
           - env:
               - name: POSTGRESQL_SERVER_HOST
