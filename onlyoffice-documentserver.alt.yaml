@@ -84,26 +84,26 @@ objects:
           - env:
               - name: ONLYOFFICE_DATA_CONTAINER
                 value: 'true'
-              - name: POSTGRESQL_SERVER_HOST
+              - name: DB_HOST
                 value: ${POSTGRESQL_SERVER_HOST}
-              - name: POSTGRESQL_SERVER_PORT
+              - name: DB_PORT
                 value: '5432'
-              - name: POSTGRESQL_SERVER_DB_NAME
+              - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
                     key: database-name
                     name: ${POSTGRESQL_SECRET}
-              - name: POSTGRESQL_SERVER_USER
+              - name: DB_USER
                 valueFrom:
                   secretKeyRef:
                     key: database-user
                     name: ${POSTGRESQL_SECRET}
-              - name: POSTGRESQL_SERVER_PASS
+              - name: DB_PWD
                 valueFrom:
                   secretKeyRef:
                     key: database-password
                     name: ${POSTGRESQL_SECRET}
-              - name: AMQP_SERVER_URL
+              - name: AMQP_URI
                 value: 'amqp://guest:guest@${RABBITMQ_SERVICE}'
               - name: REDIS_SERVER_HOST
                 value: ${REDIS_SERVICE}
@@ -212,7 +212,7 @@ objects:
                   secretKeyRef:
                     key: database-password
                     name: ${POSTGRESQL_SECRET}
-              - name: AMQP_URL
+              - name: AMQP_URI
                 value: 'amqp://guest:guest@${RABBITMQ_SERVICE}'
               - name: REDIS_SERVER_HOST
                 value: ${REDIS_SERVICE}
