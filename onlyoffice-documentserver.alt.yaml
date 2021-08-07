@@ -5,7 +5,7 @@ metadata:
 parameters:
 - name: DOCUMENTSERVER_VERSION
   description: Version of the docker image to be deployed
-  value: '5.4.2.46'
+  value: '6.3.1.32'
 - name: POSTGRESQL_SERVER_HOST
   description: Name of the PostgreSQL service
   value: postgresql.onlyoffice.svc
@@ -193,26 +193,26 @@ objects:
           - env:
               - name: ONLYOFFICE_DATA_CONTAINER_HOST
                 value: ${DOCUMENTSERVER_DATA_SERVICE}
-              - name: POSTGRESQL_SERVER_HOST
+              - name: DB_HOST
                 value: ${POSTGRESQL_SERVER_HOST}
-              - name: POSTGRESQL_SERVER_PORT
+              - name: DB_PORT
                 value: '5432'
-              - name: POSTGRESQL_SERVER_DB_NAME
+              - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
                     key: database-name
                     name: ${POSTGRESQL_SECRET}
-              - name: POSTGRESQL_SERVER_USER
+              - name: DB_USER
                 valueFrom:
                   secretKeyRef:
                     key: database-user
                     name: ${POSTGRESQL_SECRET}
-              - name: POSTGRESQL_SERVER_PASS
+              - name: DB_PWD
                 valueFrom:
                   secretKeyRef:
                     key: database-password
                     name: ${POSTGRESQL_SECRET}
-              - name: AMQP_SERVER_URL
+              - name: AMQP_URL
                 value: 'amqp://guest:guest@${RABBITMQ_SERVICE}'
               - name: REDIS_SERVER_HOST
                 value: ${REDIS_SERVICE}
