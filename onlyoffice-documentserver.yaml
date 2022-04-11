@@ -116,6 +116,28 @@ objects:
             image: documentserver:${DOCUMENTSERVER_VERSION}
             imagePullPolicy: IfNotPresent
             name: documentserver
+            readinessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              httpGet:
+                path: /healthcheck
+                port: 80
+              timeoutSeconds: 5
+            livenessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              successThreshold: 1
+              httpGet:
+                path: /healthcheck
+                port: 80
+              timeoutSeconds: 5
+            lifecycle:
+              preStop:
+                exec:
+                  command:  ['sh', '-c', 'documentserver-prepare4shutdown.sh']
             ports:
               - containerPort: 80
                 protocol: TCP
@@ -141,7 +163,7 @@ objects:
         schedulerName: default-scheduler
         securityContext: {}
         serviceAccountName: root-allowed
-        terminationGracePeriodSeconds: 30
+        terminationGracePeriodSeconds: 120
         volumes:
           - emptyDir: {}
             name: documentserver-1
